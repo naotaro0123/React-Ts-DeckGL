@@ -663,7 +663,14 @@ declare module '@deck.gl/core/lib/layer' {
 		highlightColor?: number[];
 		onClick?: LayerInputHandler;
 		onHover?: LayerInputHandler;
-		lightSettings?: LightSettings;
+    lightSettings?: LightSettings;
+    opacity?: number;
+    radiusMinPixels?: number;
+    radiusMaxPixels?: number;
+    getPosition?: any;
+    getColor?: any;
+    getRadius?: any;
+    data?: any;
 	}
 	export default class Layer extends Component {
 		constructor(props: LayerProps);
@@ -757,7 +764,7 @@ declare module '@deck.gl/core/lib/layer' {
 		_activeUpdateTrigger(propName: any): void;
 		_updateBaseUniforms(): void;
 		setUniforms(uniformMap: any): void;
-		is64bitEnabled(): boolean;
+    is64bitEnabled(): boolean;
 	}
 
 }

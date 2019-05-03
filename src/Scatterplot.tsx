@@ -80,14 +80,14 @@ class Scatterplot extends React.Component<{}, ViewState> {
     const layers = [
       new ScatterplotLayer({
         id: 'scatterplot',
-        // getPosition: (d: any) => d.position,
-        // getColor: (d: any) => [0, 128, 255],
-        // getRadius: (d: any) => 5,
-        // opacity: 0.5,
-        pickable: true
-        // radiusMinPixels: 0.25,
-        // radiusMaxPixels: 30,
-        // this.state.points
+        getPosition: (d: any) => d.position,
+        getColor: (d: any) => [0, 128, 255],
+        getRadius: (d: any) => 5,
+        opacity: 0.5,
+        pickable: true,
+        radiusMinPixels: 0.25,
+        radiusMaxPixels: 30,
+        data: this.state.points
       })
     ];
 
