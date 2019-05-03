@@ -5,7 +5,7 @@ const webpack = require('webpack');
 
 module.exports = {
   // entry: glob.sync('./src/basic/*.tsx'),
-  entry: './src/StartMapGL.tsx',
+  entry: './src/Scatterplot.tsx',
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
