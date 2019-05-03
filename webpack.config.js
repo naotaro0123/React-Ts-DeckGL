@@ -1,13 +1,20 @@
-const glob = require('glob');
+// const glob = require('glob');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
-  entry: glob.sync('./src/**/*.tsx'),
+  // entry: glob.sync('./src/basic/*.tsx'),
+  entry: './src/StartMapGL.tsx',
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'MapboxAccessToken': JSON.stringify(process.env.MapboxAccessToken)
+      }
     })
   ],
   output: {
@@ -22,5 +29,5 @@ module.exports = {
       { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' }
     ]
-  }
+  },
 };
