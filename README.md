@@ -2,10 +2,7 @@
 DeckGLでTypeScriptを使ってみる
 
 ## 参考記事
-- [Reactとdeck.glでGoogle MapタイムラインのData Visualization](https://noah.plus/blog/006/)
-- [JavaScriptフレームワークを使わずDeck.GLを動かす最小限のサンプル](https://note.mu/kazukio/n/nae8d19c59cd0)
-- [Deck.GLでオープンデータを可視化する](https://qiita.com/t-mat/items/d33506cbf409c01264db)
-- [Deck.GLのHexagonLayerでヒートマップを作ってみる](https://qiita.com/t-mat/items/b896cff2222ef7f416a5)  
+- [Reactとdeck.glでGoogle MapタイムラインのData Visualization](https://noah.plus/blog/006/)  
 上記記事を参考にカスタマイズ
 
 ## 型定義の導入手順
