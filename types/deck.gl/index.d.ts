@@ -1,5 +1,6 @@
 /// <reference path="../deck.gl__core/index.d.ts" />
 /// <reference path="../deck.gl__layers/index.d.ts" />
+/// <reference path="../deck.gl__geo-layers/index.d.ts" />
 /// <reference path="../deck.gl__react/index.d.ts" />
 
 declare module 'deck.gl' {
@@ -65,5 +66,6 @@ declare module 'deck.gl' {
     TextLayer,
     LineLayerDatum,
 	} from '@deck.gl/layers';
-	export { default, DeckGL } from '@deck.gl/react';
+  export { default, DeckGL } from '@deck.gl/react';
+  export { TripsLayer } from '@deck.gl/geo-layers';
 }
