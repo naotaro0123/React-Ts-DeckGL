@@ -6,7 +6,7 @@ import * as ReactDOM from 'react-dom';
 import { StaticMap } from 'react-map-gl';
 import DeckGL, { ScatterplotLayer } from 'deck.gl';
 // const controls = require('./modules/controls.js');
-const taxiData = require('../data/taxi');
+const taxiData = require('./data/taxi');
 
 interface InitialViewState {
   longitude: number;

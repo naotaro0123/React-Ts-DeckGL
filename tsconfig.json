@@ -4,6 +4,7 @@
     "paths": { "*": ["types/*"] },
     "outDir": "./dist/",
     "sourceMap": true,
+    "resolveJsonModule": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "noImplicitAny": true,
