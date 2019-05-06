@@ -13,7 +13,6 @@ const tooltipStyle = require('./modules/style').tooltipStyle;
 import DeckGL from 'deck.gl';
 const taxiData = require('./data/taxi');
 const renderLayers = require('./modules/deckgl-layers').renderLayers;
-
 const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
 interface InitialViewState {
@@ -128,15 +127,15 @@ class Scatterplot extends React.Component<{}, ViewState> {
         >
           <div>{hover.label}</div>
         </div>
-        {/* <MapStylePicker
+        <MapStylePicker
           onStyleChange={this.onStyleChange}
           currentStyle={this.state.style}
-        /> */}
-        {/* <LayerControls
+        />
+        <LayerControls
           settings={settings}
           propTypes={SCATTERPLOT_CONTROLS}
           onChange={(settings: any) => this._updateLayerSettings(settings)}
-        /> */}
+        />
         <DeckGL
           layers={renderLayers({
             data: this.state.points,

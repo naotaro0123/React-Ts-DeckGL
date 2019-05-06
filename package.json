@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/naotaro0123/React-Ts-DeckGL#readme",
   "devDependencies": {
+    "@babel/preset-react": "^7.0.0",
     "@types/hammerjs": "^2.0.36",
     "@types/react": "^16.8.15",
     "@types/react-dom": "^16.8.4",
@@ -47,7 +48,9 @@
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
+    "@babel/core": "^7.4.4",
     "@types/react-map-gl": "^4.1.1",
+    "babel-loader": "^8.0.5",
     "deck.gl": "^7.0.4"
   }
 }

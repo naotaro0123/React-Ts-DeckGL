@@ -26,8 +26,18 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
-      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' }
+      {
+        test: /\.tsx?$/,
+        loader: 'awesome-typescript-loader',
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: [/node_modules/],
+        options: {
+          presets: ['@babel/preset-react']
+        }
+      }
     ]
   },
 };
