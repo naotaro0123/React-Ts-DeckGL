@@ -1,5 +1,5 @@
 # React-Ts-DeckGL
-DeckGLでTypeScriptを使ってみる
+DeckGLでTypeScriptを使ってみる。DeckGLはUberのWebGL2対応したライブラリ
 
 ## 参考記事
 - [Reactとdeck.glでGoogle MapタイムラインのData Visualization](https://noah.plus/blog/006/)  
