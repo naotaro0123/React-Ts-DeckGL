@@ -1,12 +1,20 @@
+/* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { StaticMap } from 'react-map-gl';
-import DeckGL, { ScatterplotLayer } from 'deck.gl';
-// const controls = require('./modules/controls.js');
+const controls = require('./modules/controls');
+const LayerControls = controls.LayerControls;
+const MapStylePicker = controls.MapStylePicker;
+const SCATTERPLOT_CONTROLS = controls.SCATTERPLOT_CONTROLS;
+const tooltipStyle = require('./modules/style').tooltipStyle;
+import DeckGL from 'deck.gl';
 const taxiData = require('./data/taxi');
+const renderLayers = require('./modules/deckgl-layers').renderLayers;
+
+const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
 interface InitialViewState {
   longitude: number;
@@ -18,7 +26,7 @@ interface InitialViewState {
   bearing: number;
 }
 
-const initialViewState: InitialViewState = {
+const INITIAL_VIEW_STATE: InitialViewState = {
   longitude: -74,
   latitude: 40.7,
   zoom: 11,
@@ -33,19 +41,41 @@ const viewport = {
   height: window.innerHeight
 };
 
+interface Hover {
+  x: number;
+  y: number;
+  hoveredObject?: any;
+  label?: string | null;
+}
+
 interface ViewState {
+  hover: Hover;
   points?: number[];
+  settings?: {};
   style: string;
 }
 
-const viewState: ViewState = {
+const VIEW_STATE: ViewState = {
+  hover: {
+    x: 0,
+    y: 0,
+    hoveredObject: null
+  },
+  points: [],
+  settings: Object.keys(SCATTERPLOT_CONTROLS).reduce(
+    (accu, key) => ({
+      ...accu,
+      [key]: SCATTERPLOT_CONTROLS[key].value
+    }),
+    {}
+  ),
   style: 'mapbox://styles/mapbox/light-v9'
 };
 
 class Scatterplot extends React.Component<{}, ViewState> {
   constructor(props: any) {
     super(props);
-    this.state = viewState;
+    this.state = VIEW_STATE;
   }
 
   componentDidMount() {
@@ -76,29 +106,52 @@ class Scatterplot extends React.Component<{}, ViewState> {
     this.setState({ style });
   };
 
+  _onHover({ x, y, object }: any) {
+    const label = object ? (object.pickup ? 'Pickup' : 'Dropoff') : null;
+    this.setState({ hover: { x, y, hoveredObject: object, label } });
+  }
+
+  _updateLayerSettings(settings: any) {
+    this.setState({ settings });
+  }
+
   render(): JSX.Element {
-    const layers = [
-      new ScatterplotLayer({
-        id: 'scatterplot',
-        getPosition: (d: any) => d.position,
-        getColor: (d: any) => [0, 128, 255],
-        getRadius: (d: any) => 5,
-        opacity: 0.5,
-        pickable: true,
-        radiusMinPixels: 0.25,
-        radiusMaxPixels: 30,
-        data: this.state.points
-      })
-    ];
+    const { hover, settings, points } = this.state;
 
     return (
       <div>
+        <div
+          style={{
+            ...tooltipStyle,
+            transform: `translate(${hover.x}px, ${hover.y}px)`
+          }}
+        >
+          <div>{hover.label}</div>
+        </div>
+        {/* <MapStylePicker
+          onStyleChange={this.onStyleChange}
+          currentStyle={this.state.style}
+        /> */}
+        {/* <LayerControls
+          settings={settings}
+          propTypes={SCATTERPLOT_CONTROLS}
+          onChange={(settings: any) => this._updateLayerSettings(settings)}
+        /> */}
         <DeckGL
-          initialViewState={initialViewState}
-          layers={layers}
+          layers={renderLayers({
+            data: this.state.points,
+            onHover: (hover: any) => this._onHover(hover),
+            settings: this.state.settings
+          })}
+          initialViewState={INITIAL_VIEW_STATE}
           controller
-        />
-        <StaticMap {...viewport} style={this.state} />
+        >
+          <StaticMap
+            {...viewport}
+            style={this.state}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
+          />
+        </DeckGL>
       </div>
     );
   }
