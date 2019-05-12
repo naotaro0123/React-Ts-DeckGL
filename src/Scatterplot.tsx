@@ -5,14 +5,15 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { StaticMap } from 'react-map-gl';
+import DeckGL from 'deck.gl';
+const taxiData = require('./data/taxi');
+const renderLayers = require('./modules/deckgl-layers').renderLayers;
 const controls = require('./modules/controls');
 const LayerControls = controls.LayerControls;
 const MapStylePicker = controls.MapStylePicker;
 const SCATTERPLOT_CONTROLS = controls.SCATTERPLOT_CONTROLS;
 const tooltipStyle = require('./modules/style').tooltipStyle;
-import DeckGL from 'deck.gl';
-const taxiData = require('./data/taxi');
-const renderLayers = require('./modules/deckgl-layers').renderLayers;
+
 const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
 interface InitialViewState {
@@ -49,7 +50,7 @@ interface Hover {
 
 interface ViewState {
   hover: Hover;
-  points?: number[];
+  points: number[];
   settings?: {};
   style: string;
 }
@@ -81,6 +82,15 @@ class Scatterplot extends React.Component<{}, ViewState> {
     this._processData();
   }
 
+  _updateLayerSettings(settings: any) {
+    this.setState({ settings });
+  }
+
+  _onHover({ x, y, object }: any) {
+    const label = object ? (object.pickup ? 'Pickup' : 'Dropoff') : null;
+    this.setState({ hover: { x, y, hoveredObject: object, label } });
+  }
+
   _processData() {
     const points = taxiData.reduce((accu: any, curr: any) => {
       accu.push({
@@ -102,31 +112,28 @@ class Scatterplot extends React.Component<{}, ViewState> {
   }
 
   onStyleChange = (style: any) => {
-    this.setState({ style });
+    this.setState({ style: style });
   };
 
-  _onHover({ x, y, object }: any) {
-    const label = object ? (object.pickup ? 'Pickup' : 'Dropoff') : null;
-    this.setState({ hover: { x, y, hoveredObject: object, label } });
-  }
-
-  _updateLayerSettings(settings: any) {
-    this.setState({ settings });
-  }
-
-  render(): JSX.Element {
-    const { hover, settings, points } = this.state;
+  render(): JSX.Element | null {
+    const data = this.state.points;
+    if (!data.length) {
+      return null;
+    }
+    const { hover, settings } = this.state;
 
     return (
       <div>
-        <div
-          style={{
-            ...tooltipStyle,
-            transform: `translate(${hover.x}px, ${hover.y}px)`
-          }}
-        >
-          <div>{hover.label}</div>
-        </div>
+        {hover.hoveredObject && (
+          <div
+            style={{
+              ...tooltipStyle,
+              transform: `translate(${hover.x}px, ${hover.y}px)`
+            }}
+          >
+            <div>{hover.label}</div>
+          </div>
+        )}
         <MapStylePicker
           onStyleChange={this.onStyleChange}
           currentStyle={this.state.style}
@@ -147,7 +154,7 @@ class Scatterplot extends React.Component<{}, ViewState> {
         >
           <StaticMap
             {...viewport}
-            style={this.state}
+            mapStyle={this.state.style}
             mapboxApiAccessToken={MAPBOX_TOKEN}
           />
         </DeckGL>
