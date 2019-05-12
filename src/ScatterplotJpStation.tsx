@@ -87,14 +87,18 @@ class ScatterplotJpStation extends React.Component<{}, ViewState> {
   }
 
   _onHover({ x, y, object }: any) {
-    const label = object ? (object.pickup ? 'Pickup' : 'Dropoff') : null;
+    const label = object ? `${object.position[2]}` : null;
     this.setState({ hover: { x, y, hoveredObject: object, label } });
   }
 
   _processData() {
     const points = yamanoteData.reduce((accu: any, curr: any) => {
       accu.push({
-        position: [Number(curr['geo:long']), Number(curr['geo:lat'])],
+        position: [
+          Number(curr['geo:long']),
+          Number(curr['geo:lat']),
+          curr['dc:title']
+        ]
       });
       return accu;
     }, []);
