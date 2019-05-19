@@ -6,7 +6,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { StaticMap } from 'react-map-gl';
 import DeckGL from 'deck.gl';
-const taxiData = require('./data/taxi');
+import * as yamanoteData from './data/station.yamanote.json';
 const renderLayers = require('./modules/deckgl-layers').renderLayers;
 const controls = require('./modules/controls');
 const LayerControls = controls.LayerControls;
@@ -27,8 +27,8 @@ interface InitialViewState {
 }
 
 const INITIAL_VIEW_STATE: InitialViewState = {
-  longitude: -74,
-  latitude: 40.7,
+  longitude: 139.7,
+  latitude: 35.7,
   zoom: 11,
   minZoom: 5,
   maxZoom: 16,
@@ -72,7 +72,7 @@ const VIEW_STATE: ViewState = {
   style: 'mapbox://styles/mapbox/light-v9'
 };
 
-class Scatterplot extends React.Component<{}, ViewState> {
+class ScatterplotJpStation extends React.Component<{}, ViewState> {
   constructor(props: any) {
     super(props);
     this.state = VIEW_STATE;
@@ -87,22 +87,18 @@ class Scatterplot extends React.Component<{}, ViewState> {
   }
 
   _onHover({ x, y, object }: any) {
-    const label = object ? (object.pickup ? 'Pickup' : 'Dropoff') : null;
+    const label = object ? `${object.position[2]}` : null;
     this.setState({ hover: { x, y, hoveredObject: object, label } });
   }
 
   _processData() {
-    const points = taxiData.reduce((accu: any, curr: any) => {
-      accu.push({
-        position: [Number(curr.pickup_longitude), Number(curr.pickup_latitude)],
-        pickup: true
-      });
+    const points = yamanoteData.reduce((accu: any, curr: any) => {
       accu.push({
         position: [
-          Number(curr.dropoff_longitude),
-          Number(curr.dropoff_latitude)
-        ],
-        piciup: false
+          Number(curr['geo:long']),
+          Number(curr['geo:lat']),
+          curr['dc:title']
+        ]
       });
       return accu;
     }, []);
@@ -163,4 +159,4 @@ class Scatterplot extends React.Component<{}, ViewState> {
   }
 }
 
-ReactDOM.render(<Scatterplot />, document.querySelector('.content'));
+ReactDOM.render(<ScatterplotJpStation />, document.querySelector('.content'));
